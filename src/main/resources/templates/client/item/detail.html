@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body/content()})}">
+
+<head>
+	<title th:text="#{item}+#{title.detail}+' | '+ #{shop.title}"> </title>
+	<meta charset="UTF-8" />
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="user">
+
+	<h2 th:class="title" th:text="#{item}+#{title.detail}"></h2>
+
+	<div class="info_form_area" th:object="${item}">
+		<div class="item_detail_area">
+			<div class="item_image_area">
+				<img th:if="*{image != null}" th:src="@{/images/{image}(image=*{image})}"></img>
+				<img th:if="*{image == null}" th:src="@{/images/common/no_image.jpg}"></img>
+			</div>
+			<dl class="item_detail_list">
+				<dt>[[#{data.item.name}]]</dt>
+				<dd th:text="*{name}"></dd>
+				<dt>[[#{data.item.price}]]</dt>
+				<dd th:text="*{price}"></dd>
+				<dt>[[#{data.item.stock}]]</dt>
+				<dd th:if="*{stock > 5}" th:text="#{data.in.stock}"></dd>
+				<dd th:if="*{stock >= 1 and 5 >= stock }" th:text="*{stock}"></dd>
+				<dd th:if="*{stock == 0}" th:text="#{data.out.of.stock}"></dd>
+				<dt>[[#{data.category}]]</dt>
+				<dd th:text="*{categoryName}"></dd>
+				<dt>[[#{data.description}]]</dt>
+				<dd th:text="*{description}"></dd>
+				<th:block th:if="${session.user == null}">
+					<p>レビューを書くには、ログインが必要です。</p>
+					<a th:href="@{/login}" th:text="#{login}" class="btn"></a>
+				</th:block>
+				<div class="review_area">
+					<th:block th:if="${session.user != null}">
+						<dd>
+							<form th:action="@{/client/item/detail/{id}(id=${item.id})}" th:object="${reviewForm}"
+								method="post">
+								<input type="hidden" th:field="*{itemId}" />
+
+								<!--エラーメッセージ表示-->
+								<div th:if="${validated != null and validated and #fields.hasErrors('star')}"
+									th:errors="*{star}" class="error_message"></div>
+
+								<div th:if="${validated != null and validated and #fields.hasErrors('title')}"
+									th:errors="*{title}" class="error_message"></div>
+
+								<div th:if="${validated != null and validated and #fields.hasErrors('content')}"
+									th:errors="*{content}" class="error_message"></div>
+
+								<p class="hyouka">評価</p><br>
+								<!-- 入力欄 -->
+								<div class="stars" th:object="${reviewForm}">
+
+									<input type="radio" th:field="*{star}" value="5" id="star1" />
+									<label for="star1">★</label>
+
+									<input type="radio" th:field="*{star}" value="4" id="star2" />
+									<label for="star2">★</label>
+
+									<input type="radio" th:field="*{star}" value="3" id="star3" />
+									<label for="star3">★</label>
+
+									<input type="radio" th:field="*{star}" value="2" id="star4" />
+									<label for="star4">★</label>
+
+									<input type="radio" th:field="*{star}" value="1" id="star5" />
+									<label for="star5">★</label>
+								</div><br>
+
+								<label for="title" style="display:block; margin-bottom:-10px;">
+									タイトル<br>
+									<input type="text" placeholder="タイトル" th:field="*{title}" />
+								</label><br>
+
+								<label for="content" style="display:block; margin-bottom: -10px;">
+									内容<br>
+									<textarea rows="4" cols="38" placeholder="レビュー内容" th:field="*{content}"></textarea>
+								</label><br>
+
+								<button type="submit" class="toukou">投稿</button>
+							</form>
+						</dd>
+					</th:block>
+				</div>
+			</dl>
+		</div>
+		<div class="detail_button_area">
+			<form th:action="@{/client/basket/add}" method="post" class="user_info_form" th:if="*{stock > 0}">
+				<input type="hidden" th:field="*{id}" />
+				<input type="submit" value="買い物かごに入れる" class="send_button" />
+			</form>
+			<form th:action="@{/client/item/list/1}" method="post">
+				<input type="submit" value="戻る" class="back_button" />
+			</form>
+		</div>
+	</div>
+
+	<div class="review_area">
+		<p class="review-midashi">レビュー一覧</p>
+		<div th:if="${#lists.isEmpty(reviews)}">
+			<p class="review-none">レビューはまだありません。</p>
+		</div>
+
+		<div th:if="${!#lists.isEmpty(reviews)}">
+			<div class="review-list">
+				<div class="review" th:each="review : ${reviews}">
+					<div class="review-header">
+						<span th:each="i : ${#numbers.sequence(1, 5)}"
+							th:classappend="${i <= review.star} ? 'star' : 'star gray'">★</span>
+						<span class="review-title" th:text="${review.title}"></span>
+					</div>
+					<div class="review-content" th:text="${review.content}"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>
