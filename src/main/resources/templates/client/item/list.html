@@ -40,7 +40,8 @@
 
 				</td>
 				<td><a th:href="@{/client/item/detail/{id}(id=${item.id})}" th:text="${item.name}" class="item-name"></a></td>
-				<td th:text="${item.price}"></td>
+				<!--<td th:text="${item.price}"></td>-->
+				<td th:text="${#numbers.formatInteger(item.price, 1, 'COMMA')}"></td>
 				<td th:text="${item.category.name}"></td>
 			</tr>
 		</table>

@@ -80,4 +80,14 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	 * @return 商品エンティティ
 	 */
 	public Item findByNameAndDeleteFlag(String name, int notDeleted);
+	
+	
+	/**
+	 * 指定された在庫数かつ削除されていない商品を全件取得します。
+	 * 
+	 * @param stock 在庫数
+	 * @param deleteFlag 削除フラグ
+	 * @return 商品リスト
+	 */
+	List<Item> findByStockAndDeleteFlag(int stock, int deleteFlag);
 }

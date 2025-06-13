@@ -79,6 +79,18 @@ public class Order {
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orderItemsList;
 
+	//注文履歴の合計金額を計算する
+	public int getTotal() {
+		if (orderItemsList == null) {
+			return 0;
+		}
+		int total = 0;
+		for (OrderItem item : orderItemsList) {
+			total += item.getPrice() * item.getQuantity();
+		}
+		return total;
+	}
+
 	/**
 	 * 注文IDの取得
 	 * @return 注文ID

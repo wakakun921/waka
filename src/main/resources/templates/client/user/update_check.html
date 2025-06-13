@@ -11,7 +11,7 @@
 
 	<h2 th:class="title" th:text="#{user}+#{title.update.check}"></h2>
 	<p th:class="check_message" th:text="#{msg.update.check}"></p>
-	<div class="user_info_form_area"  th:object="${userForm}">
+	<div class="user_info_form_area" th:object="${userForm}">
 		<ul class="input_list">
 			<li>
 				<span class="input_title">[[#{userForm.email}]]</span>
@@ -39,9 +39,18 @@
 			</li>
 		</ul>
 
-		<form th:action="@{/client/user/update/complete}" method="post">
+		<form th:action="@{/client/user/update/complete}" method="post" th:object="${userForm}">
+			<input type="hidden" th:field="*{email}" />
+			<input type="hidden" th:field="*{password}" />
+			<input type="hidden" th:field="*{name}" />
+			<input type="hidden" th:field="*{postalCode}" />
+			<input type="hidden" th:field="*{address}" />
+			<input type="hidden" th:field="*{phoneNumber}" />
+			<input type="hidden" th:field="*{authority}" />
+			<input type="hidden" th:field="*{id}" />
 			<input type="submit" value="登録" class="send_button" />
 		</form>
+
 		<form th:action="@{/client/user/update/input}" method="post">
 			<input type="submit" value="戻る" class="back_button" />
 		</form>

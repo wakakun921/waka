@@ -11,57 +11,46 @@
 <body class="user order_payment_input">
 	<h2 th:class="title" th:text="#{title.order.payment.input}"></h2>
 	<p th:class="input_message" th:text="#{msg.order.payment.input}"></p>
-
 	<div class="user_info_form_area">
-		<form th:action="@{/client/order/check}" method="post">
+		<!-- 修正：th:object追加、th:fieldによるラジオボタンの正規バインド -->
+		<form th:action="@{/client/order/check}" th:object="${orderForm}" method="post">
 			<ul class="payment_method_select">
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="1" th:if="${payMethod == 1}" checked="checked"
-							onclick=" payChange();" />
-						<input type="radio" name="payMethod" value="1"
-							th:unless="${payMethod == 1}" />[[#{paymethod.credit.str}]]
+						<input type="radio" th:field="*{payMethod}" value="1" />
+						[[#{paymethod.credit.str}]]
 					</label>
 				</li>
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="2" th:if="${payMethod == 2}" checked="checked"
-							onclick=" payChange();" />
-						<input type="radio" name="payMethod" value="2"
-							th:unless="${payMethod == 2}" />[[#{paymethod.bank.str}]]
+						<input type="radio" th:field="*{payMethod}" value="2" />
+						[[#{paymethod.bank.str}]]
 					</label>
 				</li>
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="3" th:if="${payMethod  == 3}" checked="checked"
-							onclick=" payChange();" />
-						<input type="radio" name="payMethod" value="3"
-							th:unless="${payMethod  == 3}" />[[#{paymethod.onarrival.str}]]
+						<input type="radio" th:field="*{payMethod}" value="3" />
+						[[#{paymethod.onarrival.str}]]
 					</label>
 				</li>
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="4" th:if="${payMethod == 4}" checked="checked"
-							onclick=" payChange();" />
-						<input type="radio" name="payMethod" value="4"
-							th:unless="${payMethod == 4}" />[[#{paymethod.emoney.str}]]
+						<input type="radio" th:field="*{payMethod}" value="4" />
+						[[#{paymethod.emoney.str}]]
 					</label>
 				</li>
 				<li>
 					<label class="radio_label">
-						<input type="radio" name="payMethod" value="5" th:if="${payMethod == 5}" checked="checked"
-							onclick=" payChange();" />
-						<input type="radio" name="payMethod" value="5"
-							th:unless="${payMethod == 5}" />[[#{paymethod.convenience.str}]]
+						<input type="radio" th:field="*{payMethod}" value="5" />
+						[[#{paymethod.convenience.str}]]
 					</label>
 				</li>
 			</ul>
-
-			<input type="submit" class="send_button" value="次へ" />
-
+			<input type="submit" class="btn2" value="次へ" />
 		</form>
-		<form th:action="@{/client/order/payment/back}" method="post" class="update">
-			<input type="submit" class="back_button" value="戻る" />
+		<!-- 戻るボタン -->
+		<form th:action="@{/client/order/address/input}" method="get" class="update">
+			<input type="submit" class="btn4" value="戻る" />
 		</form>
 	</div>
 </body>

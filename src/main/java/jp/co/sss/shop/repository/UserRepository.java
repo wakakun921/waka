@@ -51,4 +51,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	 */
 	User findByIdAndDeleteFlag(Integer id, int deleteFlg);
 
+	//追記分(会員詳細)
+	User findByEmailAndPassword(String email, String password);
+
 }
